@@ -81,4 +81,4 @@ exports("status", function()
     return seatbeltOn
 end)
 
-RegisterKeyMapping('seatbelt', 'Toggle Seatbelt', 'keyboard', Config.Keybind)
+RegisterKeyMapping('seatbelt', 'Toggle Seatbelt', 'keyboard', 'B')

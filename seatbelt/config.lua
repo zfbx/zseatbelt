@@ -1,11 +1,7 @@
 Config = {}
 
--- keybind - Key you press to toggle seatbelt
-Config.keybind = "B" -- Default: B
-
 -- fixedWhileBuckled - Don't allow the person to jump/get out of the car while seatbelt is on
 Config.fixedWhileBuckled = true
-
 
 
 -- ejectVelocity - The gta velocity at which ejection from the car should happen when not wearing seatbelt
