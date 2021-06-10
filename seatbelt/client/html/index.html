@@ -1,0 +1,23 @@
+<html>
+<head>
+    <title>Seatbelt resource by zfbx</title>
+</head>
+<body>
+    <audio id="buckle" src="buckle.ogg" preload></audio>
+    <audio id="unbuckle" src="unbuckle.ogg" preload></audio>
+    <script>
+        const buckle = document.getElementById("buckle");
+        const unbuckle = document.getElementById("unbuckle");
+
+        addEventListener('message', function(event) {
+            if (event.data.type == "unbuckle") {
+                unbuckle.volume = event.data.volume;
+                unbuckle.play();
+            } else if (event.data.type == "buckle") {
+                buckle.volume = event.data.volume;
+                buckle.play();
+            }
+        });
+    </script>
+</body>
+</html>
