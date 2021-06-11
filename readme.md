@@ -1,4 +1,4 @@
-# FiveM Seatbelt System
+# zSeatbelt - A Better FiveM Seatbelt System
 
 Most resources out there I've seen all use the same method of ejecting you out of car without a seatbelt but I thought they seemed a bit resource heavy so I made this built on a completely different concept using FiveM natives to handle the physics checking.
 
@@ -17,8 +17,8 @@ I've built and polished this standalone resource from the ground up for free and
 
 ## How to use
 
-1. Copy the `seatbelt` directory into your fiveM resources (rename it if you'd like)
-2. Add `ensure seatbelt` (or whatever you renamed it to) to your server's .cfg
+1. Copy the `zseatbelt` directory into your fiveM resources (rename it if you'd like)
+2. Add `ensure zseatbelt` (or whatever you renamed it to) to your server's .cfg
 3. Add `setr game_enableFlyThroughWindscreen true` to the top of your server's .cfg **Without this the script wont work**
 4. Adjust the `config.lua` variables to how you'd like them.
 
@@ -29,6 +29,6 @@ I'm releasing this under the **MIT License** asking only that you preserve my cr
 
 ## Note
 
-This concept is new as far as I'm aware and might have some weirdness, I'm totally not sure as I haven't been able to test it with other people, if you notice anything feel free to submit an [issue](https://github.com/zfbx/FiveM-Seatbelt/issues).
+This concept is new as far as I'm aware and might have some weirdness, I'm totally not sure as I haven't been able to test it with other people, if you notice anything feel free to submit an [issue](https://github.com/zfbx/zSeatbelt/issues).
 
 Also I might add an optional visual indicator in the future that would be configurable
