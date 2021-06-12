@@ -1,6 +1,7 @@
 SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier, Config.minDamage);
 local seatbeltOn = false
 local ped = nil
+local uiactive = false
 
 Citizen.CreateThread(function()
     while true do
@@ -11,7 +12,7 @@ end)
 
 Citizen.CreateThread(function()
     while true do
-        Citizen.Wait(1)
+        Citizen.Wait(10)
         if IsPedInAnyVehicle(ped) then
             if seatbeltOn then
                 if Config.fixedWhileBuckled then
@@ -57,10 +58,13 @@ end
 
 function toggleUI(status)
     if Config.showUnbuckledIndicator then
-        if status then
-            SendNUIMessage({type = "showindicator"})
-        else
-            SendNUIMessage({type = "hideindicator"})
+        if uiactive ~= status then
+            uiactive = status
+            if status then
+                SendNUIMessage({type = "showindicator"})
+            else
+                SendNUIMessage({type = "hideindicator"})
+            end
         end
     end
 end

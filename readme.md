@@ -10,7 +10,7 @@ Most resources out there I've seen all use the same method of ejecting you out o
 - Buckle sounds for everyone else in the car with you (can be disabled)
 - When seat buckled you can't get out of the car (can be disabled)
 - Export for your current seatbelt status `exports.seatbelt:status()`
-- Only uses 0.00-0.01ms normally and ~0.15ms while in vehicle
+- Only uses 0.00-0.01ms normally and ~0.03ms while in vehicle
 
 ## Support
 I've built and polished this standalone resource from the ground up for free and open sourced it for you. If you enjoy it and would like to send a thanks I have a [ko-fi](https://ko-fi.com/zfbx8), [Paypal](https://paypal.me/zfbx) and I even have a [Patreon](https://www.patreon.com/zfbx)! Any and all support is greatly appreciated but in no way manditory, all my resources will be free and open source :)
