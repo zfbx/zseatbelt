@@ -1,5 +1,4 @@
-SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity,
-                              Config.unknownModifier, Config.minDamage);
+SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier, Config.minDamage);
 local seatbeltOn = false
 
 Citizen.CreateThread(function()
@@ -19,7 +18,7 @@ Citizen.CreateThread(function()
         else
             if seatbeltOn then
                 seatbeltOn = false
-                TriggerEvent("seatbelt:client:ToggleSeatbelt", false, false)
+                toggleSeatbelt(false, false)
             end
             toggleUI(false)
             Citizen.Wait(1000)
@@ -27,25 +26,11 @@ Citizen.CreateThread(function()
     end
 end)
 
-RegisterCommand('toggleseatbelt', function(source, args, rawCommand)
-    local ped = PlayerPedId()
-    if IsPedInAnyVehicle(ped, false) then
-        local class = GetVehicleClass(GetVehiclePedIsIn(ped))
-        if class ~= 8 and class ~= 13 and class ~= 14 then
-            TriggerEvent("seatbelt:client:ToggleSeatbelt", true)
-        end
-    end
-end, false)
-
-RegisterNetEvent("seatbelt:client:ToggleSeatbelt")
-AddEventHandler("seatbelt:client:ToggleSeatbelt", function(makeSound, toggle)
+function toggleSeatbelt(makeSound, toggle)
     if toggle == nil then
         if seatbeltOn then
             playSound("unbuckle")
-            SetFlyThroughWindscreenParams(Config.ejectVelocity,
-                                          Config.unknownEjectVelocity,
-                                          Config.unknownModifier,
-                                          Config.minDamage);
+            SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier, Config.minDamage)
         else
             playSound("buckle")
             SetFlyThroughWindscreenParams(10000.0, 10000.0, 17.0, 500.0);
@@ -57,14 +42,11 @@ AddEventHandler("seatbelt:client:ToggleSeatbelt", function(makeSound, toggle)
             SetFlyThroughWindscreenParams(10000.0, 10000.0, 17.0, 500.0);
         else
             playSound("unbuckle")
-            SetFlyThroughWindscreenParams(Config.ejectVelocity,
-                                          Config.unknownEjectVelocity,
-                                          Config.unknownModifier,
-                                          Config.minDamage);
+            SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier, Config.minDamage)
         end
         seatbeltOn = toggle
     end
-end)
+end
 
 function toggleUI(status)
     if Config.showUnbuckledIndicator then
@@ -84,19 +66,26 @@ function playSound(action)
             local passengers = {}
             for i = -1, maxpeds do
                 if not IsVehicleSeatFree(veh, i) then
-                    local ped = GetPlayerServerId(
-                                    NetworkGetPlayerIndexFromPed(
-                                        GetPedInVehicleSeat(veh, i)))
+                    local ped = GetPlayerServerId( NetworkGetPlayerIndexFromPed(GetPedInVehicleSeat(veh, i)) )
                     table.insert(passengers, ped)
                 end
             end
-            TriggerServerEvent('seatbelt:server:PlaySound', action,
-                               json.encode(passengers))
+            TriggerServerEvent('seatbelt:server:PlaySound', action, json.encode(passengers))
         else
-            TriggerEvent('seatbelt:client:PlaySound', action, Config.volume)
+            SendNUIMessage({type = action, volume = Config.volume})
         end
     end
 end
+
+RegisterCommand('toggleseatbelt', function(source, args, rawCommand)
+    local ped = PlayerPedId()
+    if IsPedInAnyVehicle(ped, false) then
+        local class = GetVehicleClass(GetVehiclePedIsIn(ped))
+        if class ~= 8 and class ~= 13 and class ~= 14 then
+            toggleSeatbelt(true)
+        end
+    end
+end, false)
 
 RegisterNetEvent('seatbelt:client:PlaySound')
 AddEventHandler('seatbelt:client:PlaySound', function(action, volume)
