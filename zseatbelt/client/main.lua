@@ -1,8 +1,15 @@
 SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier, Config.minDamage);
 local seatbeltOn = false
+local ped = nil
 
 Citizen.CreateThread(function()
-    local ped = PlayerPedId()
+    while true do
+        ped = PlayerPedId()
+        Citizen.Wait(500)
+    end
+end)
+
+Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1)
         if IsPedInAnyVehicle(ped) then
@@ -61,7 +68,7 @@ end
 function playSound(action)
     if Config.playSound then
         if Config.playSoundForPassengers then
-            local veh = GetVehiclePedIsUsing(PlayerPedId())
+            local veh = GetVehiclePedIsUsing(ped)
             local maxpeds = GetVehicleMaxNumberOfPassengers(veh) - 2
             local passengers = {}
             for i = -1, maxpeds do
@@ -78,7 +85,6 @@ function playSound(action)
 end
 
 RegisterCommand('toggleseatbelt', function(source, args, rawCommand)
-    local ped = PlayerPedId()
     if IsPedInAnyVehicle(ped, false) then
         local class = GetVehicleClass(GetVehiclePedIsIn(ped))
         if class ~= 8 and class ~= 13 and class ~= 14 then
