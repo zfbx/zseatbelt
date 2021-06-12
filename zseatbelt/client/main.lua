@@ -1,4 +1,5 @@
-SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier, Config.minDamage);
+SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity,
+                              Config.unknownModifier, Config.minDamage);
 local seatbeltOn = false
 
 Citizen.CreateThread(function()
@@ -6,21 +7,27 @@ Citizen.CreateThread(function()
     while true do
         Citizen.Wait(1)
         if IsPedInAnyVehicle(ped) then
-            if seatbeltOn and Config.fixedWhileBuckled then
-                DisableControlAction(0, 75, true) -- Disable exit vehicle when stop
-                DisableControlAction(27, 75, true) -- Disable exit vehicle when Driving
+            if seatbeltOn then
+                if Config.fixedWhileBuckled then
+                    DisableControlAction(0, 75, true) -- Disable exit vehicle when stop
+                    DisableControlAction(27, 75, true) -- Disable exit vehicle when Driving
+                end
+                toggleUI(false)
+            else
+                toggleUI(true)
             end
-        elseif seatbeltOn then
-            seatbeltOn = false
-            TriggerEvent("seatbelt:client:ToggleSeatbelt", false, false)
-            Citizen.Wait(1000)
         else
+            if seatbeltOn then
+                seatbeltOn = false
+                TriggerEvent("seatbelt:client:ToggleSeatbelt", false, false)
+            end
+            toggleUI(false)
             Citizen.Wait(1000)
         end
     end
 end)
 
-RegisterCommand('seatbelt', function(source, args, rawCommand)
+RegisterCommand('toggleseatbelt', function(source, args, rawCommand)
     local ped = PlayerPedId()
     if IsPedInAnyVehicle(ped, false) then
         local class = GetVehicleClass(GetVehiclePedIsIn(ped))
@@ -35,7 +42,10 @@ AddEventHandler("seatbelt:client:ToggleSeatbelt", function(makeSound, toggle)
     if toggle == nil then
         if seatbeltOn then
             playSound("unbuckle")
-            SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier, Config.minDamage);
+            SetFlyThroughWindscreenParams(Config.ejectVelocity,
+                                          Config.unknownEjectVelocity,
+                                          Config.unknownModifier,
+                                          Config.minDamage);
         else
             playSound("buckle")
             SetFlyThroughWindscreenParams(10000.0, 10000.0, 17.0, 500.0);
@@ -47,11 +57,24 @@ AddEventHandler("seatbelt:client:ToggleSeatbelt", function(makeSound, toggle)
             SetFlyThroughWindscreenParams(10000.0, 10000.0, 17.0, 500.0);
         else
             playSound("unbuckle")
-            SetFlyThroughWindscreenParams(Config.ejectVelocity, Config.unknownEjectVelocity, Config.unknownModifier, Config.minDamage);
+            SetFlyThroughWindscreenParams(Config.ejectVelocity,
+                                          Config.unknownEjectVelocity,
+                                          Config.unknownModifier,
+                                          Config.minDamage);
         end
         seatbeltOn = toggle
     end
 end)
+
+function toggleUI(status)
+    if Config.showUnbuckledIndicator then
+        if status then
+            SendNUIMessage({type = "showindicator"})
+        else
+            SendNUIMessage({type = "hideindicator"})
+        end
+    end
+end
 
 function playSound(action)
     if Config.playSound then
@@ -61,11 +84,14 @@ function playSound(action)
             local passengers = {}
             for i = -1, maxpeds do
                 if not IsVehicleSeatFree(veh, i) then
-                    local ped = GetPlayerServerId(NetworkGetPlayerIndexFromPed(GetPedInVehicleSeat(veh, i)))
+                    local ped = GetPlayerServerId(
+                                    NetworkGetPlayerIndexFromPed(
+                                        GetPedInVehicleSeat(veh, i)))
                     table.insert(passengers, ped)
                 end
             end
-            TriggerServerEvent('seatbelt:server:PlaySound', action, json.encode(passengers))
+            TriggerServerEvent('seatbelt:server:PlaySound', action,
+                               json.encode(passengers))
         else
             TriggerEvent('seatbelt:client:PlaySound', action, Config.volume)
         end
@@ -74,11 +100,9 @@ end
 
 RegisterNetEvent('seatbelt:client:PlaySound')
 AddEventHandler('seatbelt:client:PlaySound', function(action, volume)
-    SendNUIMessage({ type = action, volume = volume })
+    SendNUIMessage({type = action, volume = volume})
 end)
 
-exports("status", function()
-    return seatbeltOn
-end)
+exports("status", function() return seatbeltOn end)
 
-RegisterKeyMapping('seatbelt', 'Toggle Seatbelt', 'keyboard', 'B')
+RegisterKeyMapping('toggleseatbelt', 'Toggle Seatbelt', 'keyboard', 'B')

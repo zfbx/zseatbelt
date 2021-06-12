@@ -3,6 +3,9 @@ Config = {}
 -- fixedWhileBuckled - Don't allow the person to jump/get out of the car while seatbelt is on
 Config.fixedWhileBuckled = true
 
+-- showUnbuckledIndicator - Enabled seatbelt indicator if you don't have your own
+Config.showUnbuckledIndicator = true
+
 
 -- ejectVelocity - The gta velocity at which ejection from the car should happen when not wearing seatbelt
 --      This is NOT MPH or KPH but instead GTA Velocity. to convert:
