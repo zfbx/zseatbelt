@@ -1,5 +1,9 @@
 # zseatbelt - A Better FiveM Seatbelt System
 
+[![MIT License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge&logo=opensourceinitiative)](https://opensource.org/licenses/MIT)
+[![Donate on PayPal](https://img.shields.io/badge/Donate-PayPal-%2300457C?style=for-the-badge&logo=paypal)](https://paypal.me/zfbx)
+[![Sub on Patreon](https://img.shields.io/badge/Support-Patreon-%23FF424D?style=for-the-badge&logo=patreon)](https://www.patreon.com/zfbx)
+
 Most resources out there I've seen all use the same method of ejecting you out of car without a seatbelt but I thought they seemed a bit resource heavy so I made this built on a completely different concept using FiveM natives to handle the physics checking.
 
 ## Features
